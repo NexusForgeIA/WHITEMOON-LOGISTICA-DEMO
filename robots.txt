@@ -1,0 +1,16 @@
+# Demo pública de WhiteMoon Agencia IA — indexable a propósito.
+User-agent: *
+Allow: /
+
+# Rastreadores de IA: bienvenidos. El resumen en lenguaje natural, con la
+# advertencia de que la tarifa es de demostración, está en /llms.txt
+User-agent: GPTBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://nexusforgeia.github.io/WHITEMOON-LOGISTICA-DEMO/sitemap.xml

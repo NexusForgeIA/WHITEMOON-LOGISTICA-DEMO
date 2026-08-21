@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Transporte y logística con suite de calculadoras | Demo WhiteMoon</title>
+<meta name="description" content="Demo de web para empresas de transporte y logística: tres calculadoras en pestañas — portes terrestre, contenedores por carretera y flete marítimo — que estiman el servicio y captan el lead. Tarifa demo orientativa.">
+<link rel="canonical" href="https://nexusforgeia.github.io/WHITEMOON-LOGISTICA-DEMO/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="WhiteMoon Agencia IA">
+<meta name="theme-color" content="#08080d">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="WhiteMoon Agencia IA">
+<meta property="og:title" content="Transporte y logística con suite de calculadoras | Demo WhiteMoon">
+<meta property="og:description" content="Tres calculadoras en pestañas — portes terrestre, contenedores por carretera y flete marítimo — que estiman el servicio y captan el lead. Tarifa demo orientativa.">
+<meta property="og:url" content="https://nexusforgeia.github.io/WHITEMOON-LOGISTICA-DEMO/">
+<meta property="og:image" content="https://nexusforgeia.github.io/WHITEMOON-LOGISTICA-DEMO/assets/img/og-logistica.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Terminal de contenedores al anochecer, con grúas pórtico y contenedores apilados.">
+<meta name="twitter:card" content="summary_large_image">
+
+<!--
+  Sin favicon el navegador pide /favicon.ico igualmente y el 404 acaba en la
+  consola de cualquiera que abra la demo delante de un cliente.
+-->
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
+<!-- La fuente y el hero se precargan: son lo que decide el primer pintado. -->
+<link rel="preload" href="assets/fonts/sora-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/img/hero-logistica.jpg" as="image" fetchpriority="high">
+<link rel="stylesheet" href="assets/css/styles.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://nexusforgeia.github.io/WHITEMOON-LOGISTICA-DEMO/#website",
+      "url": "https://nexusforgeia.github.io/WHITEMOON-LOGISTICA-DEMO/",
+      "name": "Demo de transporte y logística — WhiteMoon",
+      "inLanguage": "es-ES",
+      "publisher": { "@id": "https://whitemoon.es/#org" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://whitemoon.es/#org",
+      "name": "WhiteMoon Agencia IA",
+      "url": "https://whitemoon.es",
+      "email": "comercial@whitemoon.es",
+      "telephone": "+34643199580",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Majadahonda",
+        "addressRegion": "Madrid",
+        "addressCountry": "ES"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://nexusforgeia.github.io/WHITEMOON-LOGISTICA-DEMO/#webpage",
+      "url": "https://nexusforgeia.github.io/WHITEMOON-LOGISTICA-DEMO/",
+      "name": "Transporte y logística con suite de calculadoras | Demo WhiteMoon",
+      "description": "Demo pública de WhiteMoon: web de empresa de transporte y logística con tres calculadoras de cotización orientativa y captación de lead.",
+      "isPartOf": { "@id": "https://nexusforgeia.github.io/WHITEMOON-LOGISTICA-DEMO/#website" },
+      "about": "Transporte terrestre, contenedores, transporte marítimo, aduanas y almacenaje",
+      "disambiguatingDescription": "Demostración comercial. Las tarifas mostradas son una tabla de ejemplo orientativa y no corresponden a ninguna empresa real."
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://nexusforgeia.github.io/WHITEMOON-LOGISTICA-DEMO/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿El precio que da la calculadora es definitivo?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Todo importe que sale de las tres calculadoras es orientativo y lo confirma el equipo. La tabla que usan es una tarifa demo de ejemplo, etiquetada como tal en la propia página."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué es el peso volumétrico y por qué encarece un envío ligero?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un camión se llena antes de metros cúbicos que de kilos. El peso volumétrico convierte el volumen en kilos (volumen en m³ × 250 kg/m³ en esta demo) y se factura el mayor de los dos: el peso real o el volumétrico."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Por qué la calculadora de contenedores da un rango y no un precio?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Porque el importe real depende del camión disponible ese día, de si hay carga de retorno, de los peajes de la ruta y de la fecha. Un número cerrado en un formulario web sería un número inventado."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Por qué el flete marítimo no sale con una cifra cerrada?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El flete lo publica cada naviera por ruta y por semana. La calculadora enseña la horquilla de partida y enumera los conceptos que se suman —THC, BAF, despacho de aduana (DUA), IGIC en Canarias, recargo IMO si la mercancía es peligrosa— sin ponerles cifra."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué zonas cubre la calculadora de portes?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cinco: misma provincia, provincias limítrofes, resto de la península, Baleares y Canarias, Ceuta y Melilla. La zona se deduce del código postal o de la provincia de origen y destino."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#contenido">
+      <span class="dot" aria-hidden="true"></span>
+      <span>WhiteMoon Logística<small>Demo · transporte y logística</small></span>
+    </a>
+    <nav class="nav-links" aria-label="Secciones">
+      <a href="#servicios">Servicios</a>
+      <a href="#calculadoras">Calculadoras</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#rutas">Rutas y zonas</a>
+      <a href="#faq">Preguntas</a>
+    </nav>
+    <a class="btn btn-1" href="#calculadoras">Calcular mi envío</a>
+  </div>
+</header>
+
+<main id="contenido">
+
+  <!-- ================================================================ HERO -->
+  <section class="hero" aria-labelledby="h-hero">
+    <div class="hero-bg" aria-hidden="true">
+      <img src="assets/img/hero-logistica.jpg" width="1600" height="900"
+           alt="" fetchpriority="high" decoding="async">
+    </div>
+    <div class="wrap hero-in">
+      <p class="eyebrow">Transporte terrestre · marítimo · aduanas</p>
+      <h1 id="h-hero">Tu mercancía, <span class="hl">cotizada en un minuto</span> y confirmada por una persona</h1>
+      <p class="lead">
+        Carga completa y grupaje, contenedores por carretera, import y export marítimo, aduanas,
+        portes y última milla. Calcula aquí una estimación orientativa del servicio que necesitas
+        y te llamamos con el presupuesto en firme.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-1" href="#calculadoras">Abrir las calculadoras</a>
+        <a class="btn btn-2" href="#servicios">Ver servicios</a>
+      </div>
+      <ul class="chips">
+        <li><b>3</b> calculadoras en una</li>
+        <li><b>5</b> zonas de reparto nacional</li>
+        <li>Respuesta en <b>menos de 24 h</b></li>
+        <li><b>Tarifa demo</b> orientativa</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- =========================================================== SERVICIOS -->
+  <section id="servicios" aria-labelledby="h-servicios">
+    <div class="wrap">
+      <p class="eyebrow rv">Servicios</p>
+      <h2 id="h-servicios" class="rv">Todo el recorrido de la mercancía, de la fábrica a la puerta</h2>
+      <p class="lead rv">
+        Un mismo interlocutor para el camión, el barco y la aduana. Si un envío cambia de modo a
+        mitad de camino, no cambia de responsable.
+      </p>
+
+      <div class="grid-serv">
+
+        <article class="card rv">
+          <figure>
+            <img src="assets/img/serv-carga.jpg" width="640" height="480" loading="lazy" decoding="async"
+                 alt="Vista aérea de una fila de semirremolques blancos estacionados en los muelles de carga de una nave logística.">
+          </figure>
+          <div class="card-body">
+            <p class="tag">Terrestre</p>
+            <h3>Carga completa y grupaje</h3>
+            <p>
+              Camión completo cuando la mercancía llena el remolque, y grupaje cuando no: pagas el
+              espacio que ocupas y compartes el resto del camión con otras cargas.
+            </p>
+          </div>
+        </article>
+
+        <article class="card rv">
+          <figure>
+            <img src="assets/img/serv-contenedores.jpg" width="640" height="480" loading="lazy" decoding="async"
+                 alt="Camión porta-contenedores frente a una pila de contenedores marítimos de colores en una terminal.">
+          </figure>
+          <div class="card-body">
+            <p class="tag">Terrestre</p>
+            <h3>Transporte de contenedores</h3>
+            <p>
+              Porta-contenedores de 20 y 40 pies y contenedores de obra, con la maniobra de carga y
+              descarga incluida. Del puerto a tu nave, o entre almacenes.
+            </p>
+          </div>
+        </article>
+
+        <article class="card rv">
+          <figure>
+            <img src="assets/img/serv-maritimo.jpg" width="640" height="480" loading="lazy" decoding="async"
+                 alt="Buque portacontenedores cargado maniobrando en la bocana de un puerto asistido por remolcadores.">
+          </figure>
+          <div class="card-body">
+            <p class="tag">Marítimo</p>
+            <h3>Marítimo import / export</h3>
+            <p>
+              Contenedor completo desde y hacia los principales puertos españoles. Reserva de espacio,
+              seguimiento del buque y aviso de llegada.
+            </p>
+          </div>
+        </article>
+
+        <article class="card rv">
+          <figure>
+            <img src="assets/img/serv-aduanas.jpg" width="640" height="480" loading="lazy" decoding="async"
+                 alt="Vista cenital de una explanada portuaria con miles de contenedores alineados en bloques.">
+          </figure>
+          <div class="card-body">
+            <p class="tag">Aduanas</p>
+            <h3>Despacho de aduanas</h3>
+            <p>
+              DUA de importación y exportación, clasificación arancelaria y cálculo de aranceles.
+              Canarias, Ceuta y Melilla incluidas, con su régimen propio.
+            </p>
+          </div>
+        </article>
+
+        <article class="card rv">
+          <figure>
+            <img src="assets/img/serv-ultima-milla.jpg" width="640" height="480" loading="lazy" decoding="async"
+                 alt="Persona cargando cajas de cartón y bultos en el interior de una furgoneta de reparto amarilla.">
+          </figure>
+          <div class="card-body">
+            <p class="tag">Distribución</p>
+            <h3>Portes y última milla</h3>
+            <p>
+              Palés, bultos y envíos urgentes a domicilio o a comercio, con plataforma elevadora si
+              en destino no hay muelle.
+            </p>
+          </div>
+        </article>
+
+        <article class="card rv">
+          <figure>
+            <img src="assets/img/serv-adr.jpg" width="640" height="480" loading="lazy" decoding="async"
+                 alt="Camión cisterna verde circulando por una carretera, con placas naranjas de mercancía peligrosa.">
+          </figure>
+          <div class="card-body">
+            <p class="tag">Especial</p>
+            <h3>Mercancía peligrosa (ADR)</h3>
+            <p>
+              Conductores con formación ADR, documentación de transporte y consejero de seguridad.
+              Cada clase tiene sus condiciones: se estudia envío a envío.
+            </p>
+          </div>
+        </article>
+
+        <article class="card rv">
+          <figure>
+            <img src="assets/img/serv-almacen.jpg" width="640" height="480" loading="lazy" decoding="async"
+                 alt="Pasillo de estanterías industriales de paletización en un almacén logístico iluminado.">
+          </figure>
+          <div class="card-body">
+            <p class="tag">Almacenaje</p>
+            <h3>Almacenaje y distribución</h3>
+            <p>
+              Metros de estantería por el tiempo que haga falta, con entradas y salidas registradas
+              y preparación de pedidos.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================= CALCULADORAS -->
+  <section id="calculadoras" class="calc" aria-labelledby="h-calc">
+    <div class="wrap">
+
+      <div class="calc-head">
+        <p class="eyebrow rv" style="justify-content:center">La suite de calculadoras</p>
+        <h2 id="h-calc" class="rv">Tres cálculos distintos, un solo sitio</h2>
+        <p class="lead rv">
+          Cada tipo de transporte se cotiza de una manera. El porte nacional sale de una fórmula
+          cerrada; el contenedor por carretera, de una horquilla por kilómetro; el flete marítimo,
+          de una tarifa que cambia cada semana. Aquí están las tres, y ninguna te da un número
+          que no podamos sostener.
+        </p>
+        <p class="lead rv">
+          <b>Todos los importes son orientativos y los confirma el equipo.</b>
+          Calculados con la <b data-etiqueta-tarifa>tarifa demo orientativa</b>.
+        </p>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Elige la calculadora">
+        <button type="button" class="tab" role="tab" id="tab-terrestre"
+                aria-controls="panel-terrestre" aria-selected="true" tabindex="0">
+          <span class="n" aria-hidden="true">1</span> Portes terrestre
+        </button>
+        <button type="button" class="tab" role="tab" id="tab-contenedores"
+                aria-controls="panel-contenedores" aria-selected="false" tabindex="-1">
+          <span class="n" aria-hidden="true">2</span> Contenedores por carretera
+        </button>
+        <button type="button" class="tab" role="tab" id="tab-maritimo"
+                aria-controls="panel-maritimo" aria-selected="false" tabindex="-1">
+          <span class="n" aria-hidden="true">3</span> Marítimo import/export
+        </button>
+      </div>
+
+      <!-- ---------------------------------------- 1 · PORTES TERRESTRE -->
+      <div id="panel-terrestre" role="tabpanel" aria-labelledby="tab-terrestre" tabindex="0">
+        <div class="calc-grid">
+
+          <div class="panel">
+            <div class="panel-h">
+              <h3>Calculadora de portes nacional</h3>
+              <span class="step">Paso 1 de 2</span>
+            </div>
+            <p class="panel-sub">
+              Cálculo por peso facturable y zona. Es la única de las tres que devuelve un importe
+              concreto — y aun así lo confirma una persona.
+            </p>
+
+            <form id="form-terrestre" novalidate>
+              <fieldset>
+                <legend>Ruta</legend>
+                <div class="row">
+                  <div class="field">
+                    <label for="t-origen">Origen</label>
+                    <input type="text" id="t-origen" name="origen" inputmode="text"
+                           placeholder="28100 o Madrid" autocomplete="postal-code">
+                    <span class="hint">Código postal o provincia.</span>
+                  </div>
+                  <div class="field">
+                    <label for="t-destino">Destino</label>
+                    <input type="text" id="t-destino" name="destino" inputmode="text"
+                           placeholder="08001 o Barcelona" autocomplete="postal-code">
+                    <span class="hint">Código postal o provincia.</span>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>Bulto o palé</legend>
+                <div class="row row-3">
+                  <div class="field">
+                    <label for="t-ancho">Ancho (m)</label>
+                    <input type="text" id="t-ancho" name="ancho" inputmode="decimal" placeholder="1,2">
+                  </div>
+                  <div class="field">
+                    <label for="t-largo">Largo (m)</label>
+                    <input type="text" id="t-largo" name="largo" inputmode="decimal" placeholder="0,8">
+                  </div>
+                  <div class="field">
+                    <label for="t-alto">Alto (m)</label>
+                    <input type="text" id="t-alto" name="alto" inputmode="decimal" placeholder="1,6">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="field">
+                    <label for="t-peso">Peso real (kg)</label>
+                    <input type="text" id="t-peso" name="peso" inputmode="decimal" placeholder="80">
+                  </div>
+                  <div class="field">
+                    <label for="t-valor">Valor declarado (€)</label>
+                    <input type="text" id="t-valor" name="valor" inputmode="decimal" placeholder="opcional">
+                    <span class="hint">Solo si hay reembolso.</span>
+                  </div>
+                </div>
+                <p class="hint">
+                  Se factura el mayor entre el peso real y el volumétrico
+                  (<span data-densidad>250</span> kg por m³).
+                </p>
+              </fieldset>
+
+              <fieldset>
+                <legend>Servicios adicionales</legend>
+                <div class="checks">
+                  <label class="check" for="t-r-combustible">
+                    <input type="checkbox" id="t-r-combustible">
+                    <span>Recargo de combustible (BAF)<small>Se aplica sobre la base ya zonificada.</small></span>
+                  </label>
+                  <label class="check" for="t-r-urgente">
+                    <input type="checkbox" id="t-r-urgente">
+                    <span>Servicio urgente 24 h<small>Entrega al día siguiente laborable.</small></span>
+                  </label>
+                  <label class="check" for="t-r-plataforma">
+                    <input type="checkbox" id="t-r-plataforma">
+                    <span>Plataforma elevadora<small>Si en destino no hay muelle ni carretilla.</small></span>
+                  </label>
+                  <label class="check" for="t-r-adr">
+                    <input type="checkbox" id="t-r-adr">
+                    <span>Mercancía peligrosa (ADR)<small>Requiere conductor y documentación ADR.</small></span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <div class="calc-actions">
+                <button type="submit" class="btn btn-1">Calcular estimación</button>
+                <button type="button" class="btn btn-2" id="t-ejemplo">Probar con un ejemplo</button>
+              </div>
+
+              <div class="error-box" id="err-terrestre" role="alert" hidden></div>
+            </form>
+          </div>
+
+          <div class="panel result">
+            <div class="panel-h">
+              <h3>Tu estimación</h3>
+              <span class="step">Paso 2 de 2</span>
+            </div>
+            <p class="result-empty" id="res-terrestre-vacio">
+              Rellena la ruta y las medidas del bulto y aquí verás el desglose completo:
+              volumen, peso facturable, tramo, zona, recargos e IVA.
+            </p>
+            <div id="res-terrestre" role="status" aria-live="polite" hidden></div>
+          </div>
+
+        </div>
+
+        <details class="tarifa">
+          <summary>Ver la tarifa demo de portes: tramos, zonas y recargos</summary>
+          <div class="tarifa-body">
+            <p class="lead">
+              <b data-etiqueta-tarifa>Tarifa demo orientativa</b>. Es una tabla de ejemplo construida
+              para esta demostración: no es la tarifa de ninguna empresa real y no debe citarse como
+              precio de mercado.
+            </p>
+
+            <h4>Tramos por peso facturable</h4>
+            <div class="tabla-scroll">
+              <table class="data" id="tabla-tramos">
+                <thead><tr><th scope="col">Tramo</th><th scope="col">Fijo</th><th scope="col">Por kilo</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <h4>Zonas</h4>
+            <div class="tabla-scroll">
+              <table class="data" id="tabla-zonas">
+                <thead><tr><th scope="col">Zona</th><th scope="col">Alcance</th><th scope="col">Factor</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <h4>Recargos</h4>
+            <div class="tabla-scroll">
+              <table class="data" id="tabla-recargos">
+                <thead><tr><th scope="col">Concepto</th><th scope="col">Cómo se aplica</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- --------------------------------- 2 · CONTENEDORES POR CARRETERA -->
+      <div id="panel-contenedores" role="tabpanel" aria-labelledby="tab-contenedores" tabindex="0" hidden>
+        <div class="calc-grid">
+
+          <div class="panel">
+            <div class="panel-h">
+              <h3>Contenedor por carretera</h3>
+              <span class="step">Paso 1 de 2</span>
+            </div>
+            <p class="panel-sub">
+              Estimación por kilómetro. El resultado es una horquilla, no un precio cerrado:
+              depende del camión y de la disponibilidad del día.
+            </p>
+
+            <form id="form-contenedores" novalidate>
+              <fieldset>
+                <legend>El trayecto</legend>
+                <div class="field">
+                  <label for="c-km">Distancia (km)</label>
+                  <input type="text" id="c-km" name="km" inputmode="decimal" placeholder="620">
+                  <span class="hint">Kilómetros de ida entre el punto de recogida y el de entrega.</span>
+                </div>
+                <div class="field">
+                  <label for="c-tipo">Tipo de contenedor</label>
+                  <select id="c-tipo" name="tipo"></select>
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>Ámbito</legend>
+                <div class="checks">
+                  <label class="check" for="c-internacional">
+                    <input type="checkbox" id="c-internacional">
+                    <span>El trayecto sale de España (UE)<small>Peajes, tiempos de conducción y retorno en vacío encarecen el kilómetro.</small></span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <div class="calc-actions">
+                <button type="submit" class="btn btn-1">Ver la horquilla</button>
+                <button type="button" class="btn btn-2" id="c-ejemplo">Probar con un ejemplo</button>
+              </div>
+
+              <div class="error-box" id="err-contenedores" role="alert" hidden></div>
+            </form>
+          </div>
+
+          <div class="panel result">
+            <div class="panel-h">
+              <h3>Tu horquilla</h3>
+              <span class="step">Paso 2 de 2</span>
+            </div>
+            <p class="result-empty" id="res-contenedores-vacio">
+              Dinos los kilómetros y el tipo de equipo y aquí verás el rango orientativo, con la
+              franja por kilómetro de la que sale.
+            </p>
+            <div id="res-contenedores" role="status" aria-live="polite" hidden></div>
+          </div>
+
+        </div>
+
+        <details class="tarifa">
+          <summary>Ver las franjas demo por kilómetro</summary>
+          <div class="tarifa-body">
+            <p class="lead">
+              <b data-etiqueta-tarifa>Tarifa demo orientativa</b>. Franjas de ejemplo, editables en un
+              único fichero. No son las tarifas de ninguna empresa real.
+            </p>
+            <div class="tabla-scroll">
+              <table class="data" id="tabla-franjas">
+                <thead><tr><th scope="col">Equipo</th><th scope="col">Franja por kilómetro</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- ------------------------------------------------- 3 · MARÍTIMO -->
+      <div id="panel-maritimo" role="tabpanel" aria-labelledby="tab-maritimo" tabindex="0" hidden>
+        <div class="calc-grid">
+
+          <div class="panel">
+            <div class="panel-h">
+              <h3>Marítimo import / export</h3>
+              <span class="step">Paso 1 de 2</span>
+            </div>
+            <p class="panel-sub">
+              Cotización guiada. Aquí no sale un precio cerrado a propósito: sale la horquilla de
+              flete y la lista completa de conceptos que lo acompañan.
+            </p>
+
+            <form id="form-maritimo" novalidate>
+              <fieldset>
+                <legend>La ruta</legend>
+                <div class="field">
+                  <label for="m-origen">Puerto o país de origen</label>
+                  <input type="text" id="m-origen" name="origen" list="m-origenes"
+                         placeholder="Shanghái (China)" autocomplete="off">
+                  <datalist id="m-origenes"></datalist>
+                  <span class="hint">Si aún no sabes el puerto exacto, el país basta para empezar.</span>
+                </div>
+                <div class="field">
+                  <label for="m-destino">Puerto de destino en España</label>
+                  <select id="m-destino" name="destino"></select>
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>La carga</legend>
+                <div class="field">
+                  <label for="m-equipo">Tipo de contenedor</label>
+                  <select id="m-equipo" name="equipo"></select>
+                </div>
+                <div class="field">
+                  <label for="m-incoterm">Incoterm</label>
+                  <select id="m-incoterm" name="incoterm"></select>
+                  <span class="hint">Marca dónde empieza nuestra responsabilidad y dónde acaba la del vendedor.</span>
+                </div>
+                <div class="checks">
+                  <label class="check" for="m-peligrosa">
+                    <input type="checkbox" id="m-peligrosa">
+                    <span>Mercancía peligrosa<small>Añade declaración IMDG y recargo de la naviera.</small></span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <div class="calc-actions">
+                <button type="submit" class="btn btn-1">Ver la estimación guiada</button>
+                <button type="button" class="btn btn-2" id="m-ejemplo">Probar con un ejemplo</button>
+              </div>
+
+              <div class="error-box" id="err-maritimo" role="alert" hidden></div>
+            </form>
+          </div>
+
+          <div class="panel result">
+            <div class="panel-h">
+              <h3>Tu estimación guiada</h3>
+              <span class="step">Paso 2 de 2</span>
+            </div>
+            <p class="result-empty" id="res-maritimo-vacio">
+              Dinos origen, destino, equipo e incoterm y aquí verás la horquilla de flete y todos
+              los conceptos que se suman: THC, BAF, despacho de aduana, IGIC en Canarias…
+            </p>
+            <div id="res-maritimo" role="status" aria-live="polite" hidden></div>
+          </div>
+
+        </div>
+
+        <details class="tarifa">
+          <summary>Ver las horquillas demo de flete base</summary>
+          <div class="tarifa-body">
+            <p class="lead">
+              <b data-etiqueta-tarifa>Tarifa demo orientativa</b>. Horquillas de ejemplo para enseñar
+              el orden de magnitud. El flete real lo publica cada naviera por ruta y por semana.
+            </p>
+            <div class="tabla-scroll">
+              <table class="data" id="tabla-fletes">
+                <thead><tr><th scope="col">Equipo</th><th scope="col">Flete base orientativo</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <p class="lead" style="margin-top:16px">
+              A ese flete se le suman siempre THC, BAF, despacho de aduana (DUA) y transporte
+              terrestre desde el puerto, más IGIC si el destino es Canarias y recargo IMO si la
+              mercancía es peligrosa. Ninguno lleva cifra aquí: los fija la naviera, la terminal o
+              la aduana.
+            </p>
+          </div>
+        </details>
+      </div>
+
+      <noscript>
+        <p class="aviso">
+          <b>Las calculadoras necesitan JavaScript.</b> Si lo tienes desactivado, escríbenos por
+          WhatsApp al <a href="https://wa.me/34643199580">643 199 580</a> o a
+          <a href="mailto:comercial@whitemoon.es">comercial@whitemoon.es</a> con la ruta y las medidas
+          y te pasamos la estimación a mano.
+        </p>
+      </noscript>
+
+    </div>
+  </section>
+
+  <!-- ======================================================= CÓMO FUNCIONA -->
+  <section id="como-funciona" aria-labelledby="h-como">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow rv">Cómo funciona</p>
+        <h2 id="h-como" class="rv">De la estimación a la mercancía en destino</h2>
+        <p class="lead rv">
+          La calculadora es el principio, no el final. A partir de ahí interviene alguien que
+          conoce la ruta.
+        </p>
+        <ol class="pasos rv">
+          <li>
+            <div>
+              <h3>Calculas tu estimación</h3>
+              <p>Eliges la calculadora que corresponde a tu envío y ves el desglose completo, sin letra pequeña.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Dejas nombre y teléfono</h3>
+              <p>Los parámetros del cálculo viajan con tu contacto: nadie te va a pedir dos veces lo mismo.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Te llamamos con el precio en firme</h3>
+              <p>Confirmamos accesos, fechas y condiciones reales, y cerramos el importe definitivo.</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Recogemos y entregamos</h3>
+              <p>Con seguimiento del envío y aviso en destino. Si algo cambia por el camino, te lo contamos antes.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+      <div class="split-img rv">
+        <img src="assets/img/como-funciona.jpg" width="900" height="700" loading="lazy" decoding="async"
+             alt="Carretilla retráctil moviendo un palé entre estanterías altas dentro de un almacén.">
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================= RUTAS/ZONAS -->
+  <section id="rutas" aria-labelledby="h-rutas">
+    <div class="wrap zonas-grid">
+      <div>
+        <p class="eyebrow rv">Rutas y zonas</p>
+        <h2 id="h-rutas" class="rv">Dónde llegamos y cómo se calcula la zona</h2>
+        <p class="lead rv">
+          En terrestre, la zona sale del código postal de origen y de destino. En marítimo, del
+          puerto de entrada. No hay tarifas escondidas por comunidad autónoma: hay cinco zonas y
+          están todas a la vista.
+        </p>
+        <ul class="chips rv" style="margin-top:22px">
+          <li><b>Z1</b> Misma provincia</li>
+          <li><b>Z2</b> Provincias limítrofes</li>
+          <li><b>Z3</b> Resto de península</li>
+          <li><b>Z4</b> Baleares</li>
+          <li><b>Z5</b> Canarias, Ceuta y Melilla</li>
+        </ul>
+        <p class="lead rv" style="margin-top:22px">
+          Baleares y Canarias llevan tramo marítimo, y eso se nota en el factor de zona. Canarias,
+          Ceuta y Melilla además tienen territorio aduanero propio: el envío pasa por DUA y paga
+          IGIC o IPSI en lugar de IVA peninsular. La calculadora te lo avisa cuando toca.
+        </p>
+        <p class="lead rv">
+          En marítimo trabajamos con entrada por Valencia, Barcelona, Algeciras, Bilbao y Las Palmas,
+          y con los orígenes habituales de Asia, Mediterráneo, América y África.
+        </p>
+        <p class="rv" style="margin-top:26px">
+          <a class="btn btn-1" href="#calculadoras" data-tab="panel-terrestre">Calcular mi zona</a>
+        </p>
+      </div>
+      <div class="rv">
+        <img src="assets/img/rutas-zonas.jpg" width="900" height="700" loading="lazy" decoding="async"
+             alt="Camión con contenedor saliendo de una terminal portuaria bajo grúas pórtico al atardecer.">
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================= FAQ -->
+  <section id="faq" aria-labelledby="h-faq">
+    <div class="wrap">
+      <p class="eyebrow rv">Preguntas</p>
+      <h2 id="h-faq" class="rv">Lo que más se pregunta antes de contratar</h2>
+
+      <div class="faq-list">
+        <details class="rv">
+          <summary>¿El precio que da la calculadora es definitivo?</summary>
+          <div class="a">
+            <p>
+              No. Todo importe que sale de las tres calculadoras es <b>orientativo y lo confirma el
+              equipo</b>. La tabla que usan es una <b data-etiqueta-tarifa>tarifa demo orientativa</b>,
+              etiquetada como tal en la propia página: es una tabla de ejemplo de esta demostración,
+              no la tarifa de ninguna empresa real.
+            </p>
+          </div>
+        </details>
+
+        <details class="rv">
+          <summary>¿Qué es el peso volumétrico y por qué encarece un envío ligero?</summary>
+          <div class="a">
+            <p>
+              Un camión se llena antes de metros cúbicos que de kilos. Por eso se convierte el volumen
+              en kilos —volumen en m³ × <span data-densidad>250</span> kg/m³ en esta demo— y se factura
+              el mayor de los dos: el peso real o el volumétrico.
+            </p>
+            <p>
+              Un palé de colchones de 1,2 × 0,8 × 1,6 m pesa 80 kg reales pero ocupa 1,536 m³, es decir
+              384 kg volumétricos. Se factura por 384 kg. Es la diferencia entre pagar por lo que pesa
+              y pagar por lo que ocupa.
+            </p>
+          </div>
+        </details>
+
+        <details class="rv">
+          <summary>¿Por qué la calculadora de contenedores da un rango y no un precio?</summary>
+          <div class="a">
+            <p>
+              Porque el importe real depende del camión disponible ese día, de si hay carga de retorno,
+              de los peajes de la ruta y de la fecha. Un número cerrado en un formulario web sería un
+              número inventado, y luego habría que corregirlo por teléfono.
+            </p>
+          </div>
+        </details>
+
+        <details class="rv">
+          <summary>¿Por qué el flete marítimo no sale con una cifra cerrada?</summary>
+          <div class="a">
+            <p>
+              El flete lo publica cada naviera por ruta y por semana, y se mueve mucho. La calculadora
+              enseña la horquilla de partida del equipo elegido y enumera los conceptos que se suman
+              —THC, BAF, despacho de aduana (DUA), transporte terrestre desde el puerto, IGIC si el
+              destino es Canarias y recargo IMO si la mercancía es peligrosa— sin ponerles cifra.
+              Con tus parámetros, el equipo pide tarifa real y te la confirma.
+            </p>
+          </div>
+        </details>
+
+        <details class="rv">
+          <summary>¿Qué zonas cubre la calculadora de portes?</summary>
+          <div class="a">
+            <p>
+              Cinco: misma provincia, provincias limítrofes, resto de la península, Baleares, y
+              Canarias, Ceuta y Melilla. La zona se deduce de los dos primeros dígitos del código
+              postal, o del nombre de la provincia si prefieres escribirlo así.
+            </p>
+            <p>
+              La adyacencia entre provincias que usa esta demo es una simplificación: no contempla
+              enclaves como Treviño o Llívia.
+            </p>
+          </div>
+        </details>
+
+        <details class="rv">
+          <summary>¿Qué pasa con la mercancía peligrosa?</summary>
+          <div class="a">
+            <p>
+              En terrestre, el ADR añade un recargo porcentual y exige conductor con formación,
+              documentación de transporte y consejero de seguridad. En marítimo, la naviera aplica un
+              recargo IMO que depende de la clase IMDG y del embalaje. En los dos casos hace falta
+              revisar la ficha de seguridad del producto antes de cerrar nada.
+            </p>
+          </div>
+        </details>
+
+        <details class="rv">
+          <summary>¿Qué pasa con mis datos si dejo el teléfono?</summary>
+          <div class="a">
+            <p>
+              Esto es una demostración de WhiteMoon: los datos que dejes se guardan en el CRM de
+              pruebas de WhiteMoon y sirven para enseñar cómo funciona la captación. No se comparten
+              con terceros. Si has entrado por curiosidad y quieres que borremos tu registro,
+              escríbenos a <a href="mailto:comercial@whitemoon.es">comercial@whitemoon.es</a>.
+            </p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ CONTACTO -->
+  <section id="contacto" class="contacto" aria-labelledby="h-contacto">
+    <div class="wrap contacto-grid">
+      <div>
+        <p class="eyebrow rv">Hablemos</p>
+        <h2 id="h-contacto" class="rv">Cuéntanos qué tienes que mover</h2>
+        <p class="lead rv">
+          Si tu envío no encaja en ninguna de las tres calculadoras —mercancía sobredimensionada,
+          proyecto industrial, un tráfico recurrente— escríbenos y lo estudiamos. Las rutas raras
+          son las que mejor se nos dan.
+        </p>
+        <p class="rv">
+          <a class="btn btn-1" href="#calculadoras">Calcular mi envío</a>
+        </p>
+      </div>
+      <div class="rv">
+        <ul class="canales">
+          <li>
+            <a href="https://wa.me/34643199580">
+              <span class="ic" aria-hidden="true">WA</span>
+              <span>WhatsApp<small>643 199 580 · respuesta el mismo día</small></span>
+            </a>
+          </li>
+          <li>
+            <a href="tel:+34643199580">
+              <span class="ic" aria-hidden="true">TEL</span>
+              <span>Teléfono<small>643 199 580</small></span>
+            </a>
+          </li>
+          <li>
+            <a href="mailto:comercial@whitemoon.es">
+              <span class="ic" aria-hidden="true">@</span>
+              <span>Email<small>comercial@whitemoon.es</small></span>
+            </a>
+          </li>
+          <li>
+            <a href="https://whitemoon.es">
+              <span class="ic" aria-hidden="true">WM</span>
+              <span>WhiteMoon Agencia IA<small>Majadahonda, Madrid · whitemoon.es</small></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <p style="margin:0">
+      © <span id="anio">2026</span> WhiteMoon Agencia IA · Demo pública de web para empresas de
+      transporte y logística.
+    </p>
+    <p style="margin:0">
+      Importes <b>orientativos</b> calculados con una
+      <b data-etiqueta-tarifa>tarifa demo orientativa</b> · no son tarifas de ninguna empresa real.
+    </p>
+  </div>
+</footer>
+
+<script src="assets/js/tarifa.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/lead.js"></script>
+<script src="assets/js/calc-terrestre.js"></script>
+<script src="assets/js/calc-contenedores.js"></script>
+<script src="assets/js/calc-maritimo.js"></script>
+<script src="assets/js/site.js"></script>
+</body>
+</html>

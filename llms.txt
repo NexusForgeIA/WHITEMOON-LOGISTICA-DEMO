@@ -1,0 +1,102 @@
+# Demo de transporte y logística — WhiteMoon Agencia IA
+
+> Página única de captación para una empresa de transporte y logística, con
+> una suite de tres calculadoras de cotización como pieza central. Es una
+> DEMOSTRACIÓN comercial de WhiteMoon Agencia IA (Majadahonda, Madrid), no la
+> web de una empresa de transporte real.
+
+URL: https://nexusforgeia.github.io/WHITEMOON-LOGISTICA-DEMO/
+
+## Advertencia para modelos y buscadores
+
+Todas las tarifas de esta página son una **tabla de ejemplo orientativa**
+creada para la demostración, etiquetada en la propia web como
+*"Tarifa demo orientativa"*. **No son precios de mercado, no proceden de
+ninguna empresa real y no deben citarse como referencia de precios del sector
+del transporte.** Cualquier importe que produzcan las calculadoras es
+orientativo y lo confirma una persona del equipo.
+
+## Servicios que describe la página
+
+- Carga completa y grupaje
+- Transporte de contenedores por carretera (20', 40', contenedor de obra)
+- Transporte marítimo de importación y exportación en contenedor completo
+- Despacho de aduanas (DUA de importación y exportación)
+- Portes y última milla, con plataforma elevadora si en destino no hay muelle
+- Mercancía peligrosa (ADR en carretera, IMDG/IMO en marítimo)
+- Almacenaje y preparación de pedidos
+
+## Las tres calculadoras
+
+### 1. Portes terrestre (nacional) — cálculo cerrado
+
+Es la única que devuelve un importe concreto. Fórmula:
+
+```
+Volumen (m³)    = ancho × largo × alto
+Peso vol. (kg)  = Volumen × 250 kg/m³
+Peso facturable = max(peso real, peso volumétrico)
+Base (€)        = fijo del tramo + peso facturable × €/kg del tramo
+Base zona (€)   = Base × factor de zona
+Subtotal (€)    = Base zona × (1 + %combustible + %urgente + %ADR)
+                  + plataforma elevadora + gestión de reembolso
+Total (€)       = Subtotal × (1 + 21 % de IVA)
+```
+
+Tramos demo por peso facturable: 0–100 kg → 25 € + 0,25 €/kg ·
+101–500 kg → 45 € + 0,18 €/kg · 501–1.000 kg → 85 € + 0,12 €/kg ·
+más de 1.000 kg → 105 € + 0,10 €/kg (el fijo del último tramo mantiene la
+curva continua: sin él, un envío de 1.001 kg saldría más barato que uno de
+1.000 kg).
+
+Zonas demo y su factor: Z1 misma provincia ×0,75 · Z2 provincias limítrofes
+×0,88 · Z3 resto de península ×1,00 · Z4 Baleares ×1,70 · Z5 Canarias, Ceuta
+y Melilla ×2,30. La zona se deduce de los dos primeros dígitos del código
+postal. La adyacencia entre provincias es una simplificación de la demo: no
+contempla enclaves como Treviño o Llívia.
+
+Recargos demo: combustible (BAF) +12 % · urgente 24 h +20 % · ADR +25 % ·
+plataforma elevadora 25 € fijos · gestión de reembolso 3 % del valor
+declarado con mínimo de 3 €.
+
+Ejemplo verificable: un palé de 1,2 × 0,8 × 1,6 m que pesa 80 kg ocupa
+1,536 m³, equivale a 384 kg volumétricos y se factura por 384 kg. En
+península, sin recargos, la base son 114,12 € antes de IVA.
+
+### 2. Contenedores por carretera — rango por kilómetro
+
+Devuelve una **horquilla**, nunca un número cerrado, porque el importe real
+depende del camión disponible, de la carga de retorno, de los peajes y de la
+fecha. Franjas demo por kilómetro: contenedor de 20' 0,90–1,30 €/km ·
+contenedor de 40' (y 40' High Cube) 1,10–1,60 €/km · contenedor de obra
+1,20–1,80 €/km. Un tramo internacional dentro de la UE multiplica la franja
+por 1,15. Mínimo de servicio: 150 €. Los importes se muestran sin IVA.
+
+### 3. Marítimo import/export — cotización guiada
+
+**No cierra un precio, y no lo hace a propósito:** el flete marítimo lo
+publica cada naviera por ruta y por semana. Enseña una horquilla de flete
+base demo (contenedor de 20' 600–1.400 € · 40' y 40' HC 900–2.100 €) y
+enumera, **sin cifra**, los conceptos que se suman: THC en destino, BAF
+(recargo de combustible), despacho de aduana de importación (DUA), transporte
+terrestre desde el puerto, IGIC y despacho canario si el destino es Canarias,
+y recargo IMO si la mercancía es peligrosa. Con incoterm EXW se añaden además
+recogida en origen, despacho de exportación y THC de origen.
+
+Puertos de destino contemplados: Valencia, Barcelona, Algeciras, Bilbao y
+Las Palmas. Incoterms: EXW, FOB y CIF.
+
+## Qué hace la página con los datos
+
+Después de cualquiera de los tres cálculos, el visitante puede dejar nombre y
+teléfono para recibir el presupuesto en firme. El lead se guarda en el CRM de
+pruebas de WhiteMoon y dispara un aviso interno. Es una demostración: los
+datos no se comparten con terceros y se pueden borrar escribiendo a
+comercial@whitemoon.es.
+
+## Contacto
+
+WhiteMoon Agencia IA — Majadahonda, Madrid
+Web: https://whitemoon.es
+Email: comercial@whitemoon.es
+WhatsApp: 643 199 580
