@@ -368,6 +368,120 @@ table.data thead th { color: var(--p2); font-weight: 600; font-size: .78rem; let
 table.data td { color: var(--muted); font-variant-numeric: tabular-nums; }
 table.data td:first-child { color: var(--text); }
 
+/* ====================================================== agente IA (Hugo)
+
+   El chat reutiliza el sistema de la demo: mismo .panel, mismo .desglose
+   para el "de dónde sale cada cifra", mismos colores. Lo único nuevo es la
+   conversación y la ficha de métricas. */
+.chat-grid { display: grid; gap: 24px; grid-template-columns: 1.15fr .85fr; align-items: start; margin-top: 38px; }
+
+.chat { padding: 0; overflow: hidden; }
+
+.chat-h {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 22px; border-bottom: 1px solid var(--line); background: var(--surface-2);
+}
+.chat-av {
+  width: 42px; height: 42px; border-radius: 50%; flex: none;
+  display: grid; place-items: center; color: #fff; font-weight: 700; font-size: .95rem;
+  background: linear-gradient(135deg, var(--p), var(--g));
+}
+.chat-h b { display: block; font-size: .98rem; font-weight: 600; }
+.chat-h small { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: .8rem; }
+.chat-h small::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--g); flex: none; }
+
+/* Altura fija y scroll propio: si el log creciera sin límite, cada respuesta
+   empujaría la página entera y el campo de escribir se iría de pantalla. */
+.chat-log {
+  height: 460px; overflow-y: auto; overscroll-behavior: contain;
+  padding: 20px 22px; display: flex; flex-direction: column; gap: 16px;
+}
+
+.msg { max-width: 94%; }
+.msg-quien {
+  display: block; margin-bottom: 5px; font-size: .7rem; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--muted);
+}
+.msg-cuerpo { border-radius: var(--radius-sm); padding: 12px 15px; font-size: .94rem; }
+.msg-cuerpo p { margin: 0 0 .6em; }
+.msg-cuerpo p:last-child { margin-bottom: 0; }
+.msg-hugo .msg-cuerpo { background: var(--surface-2); border: 1px solid var(--line); }
+.msg-tu { margin-left: auto; }
+.msg-tu .msg-quien { text-align: right; }
+.msg-tu .msg-cuerpo { background: rgba(124, 77, 255, .16); border: 1px solid rgba(157, 112, 255, .38); }
+
+.puntos { display: flex; gap: 5px; align-items: center; }
+.puntos span {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--p2);
+  animation: hugo-punto 1.1s ease-in-out infinite;
+}
+.puntos span:nth-child(2) { animation-delay: .15s; }
+.puntos span:nth-child(3) { animation-delay: .3s; }
+@keyframes hugo-punto { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+
+.ok-lead { color: var(--g); margin: 0; }
+.err-lead { color: #ff8a8a; margin: 0; }
+
+.chat-ejemplos { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px 22px 0; }
+.chat-ejemplos button {
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--muted);
+  border-radius: 999px; padding: 7px 14px; min-height: 36px;
+  font: inherit; font-size: .8rem; cursor: pointer;
+  transition: border-color .18s ease, color .18s ease;
+}
+.chat-ejemplos button:hover { border-color: var(--p2); color: var(--text); }
+
+.chat-form { display: flex; gap: 10px; padding: 16px 22px 8px; }
+.chat-form input { flex: 1 1 auto; }
+.chat-form .btn { flex: none; padding: 12px 24px; }
+.chat-nota { margin: 0; padding: 0 22px 18px; font-size: .76rem; color: var(--muted); }
+
+/* Ficha de métricas. Las cifras vienen calculadas del servidor; aquí solo
+   se colocan. */
+.metricas-h {
+  margin: 0 0 12px; font-size: .76rem; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--p2);
+}
+.metricas-grid {
+  list-style: none; margin: 0 0 18px; padding: 0;
+  display: grid; gap: 10px; grid-template-columns: 1fr 1fr;
+}
+.metricas-grid li {
+  border: 1px solid rgba(0, 212, 170, .25);
+  background: linear-gradient(160deg, rgba(0,212,170,.09), rgba(124,77,255,.07));
+  border-radius: var(--radius-sm); padding: 12px 14px;
+}
+.metricas-grid span {
+  display: block; font-size: .72rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--muted);
+}
+.metricas-grid b {
+  display: block; margin-top: 3px; font-size: 1.16rem; font-weight: 700;
+  letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+}
+.metricas-grid b.destaca { color: var(--g); }
+.metricas-grid small {
+  font-size: .64rem; font-weight: 500; color: var(--muted);
+  letter-spacing: .08em; text-transform: uppercase;
+}
+
+/* El desglose del chat lleva frases, no importes: sin nowrap y algo más
+   pequeño, o se sale de la burbuja. */
+.metricas .desglose th, .metricas .desglose td { font-size: .82rem; }
+.metricas .desglose td { white-space: normal; }
+.metricas .aviso { font-size: .8rem; }
+
+/* Columna lateral: qué hace el agente y con qué fórmulas. */
+.formulas { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 16px; }
+.formulas li { border-left: 2px solid var(--line); padding-left: 14px; }
+.formulas b { display: block; font-size: .92rem; font-weight: 600; }
+.formulas code {
+  display: block; margin-top: 4px; font-size: .8rem; color: var(--g);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  word-break: break-word;
+}
+.formulas span { display: block; margin-top: 4px; font-size: .82rem; color: var(--muted); }
+
 /* ---------------------------------------------------------- cómo funciona */
 .split { display: grid; gap: 40px; grid-template-columns: 1fr 1fr; align-items: center; }
 .split img { border-radius: var(--radius); border: 1px solid var(--line); }
@@ -430,7 +544,7 @@ footer a:hover { color: var(--text); }
 /* ------------------------------------------------------------ responsive */
 @media (max-width: 900px) {
   .nav-links { display: none; }
-  .calc-grid, .split, .zonas-grid, .contacto-grid { grid-template-columns: 1fr; }
+  .calc-grid, .chat-grid, .split, .zonas-grid, .contacto-grid { grid-template-columns: 1fr; }
   .result { position: static; }
   .split .split-img { order: -1; }
   :root { --gutter: 20px; }
@@ -444,6 +558,12 @@ footer a:hover { color: var(--text); }
   .hero-cta .btn { width: 100%; }
   .brand small { display: none; }
   .desglose { font-size: .88rem; }
+  .chat-log { height: 68vh; max-height: 460px; padding: 16px; }
+  .chat-h, .chat-ejemplos, .chat-form, .chat-nota { padding-left: 16px; padding-right: 16px; }
+  .msg { max-width: 100%; }
+  .metricas-grid { grid-template-columns: 1fr; }
+  .chat-form { flex-wrap: wrap; }
+  .chat-form .btn { width: 100%; }
   .tabs { border-radius: var(--radius); }
   .tab { flex: 0 0 auto; }
 }

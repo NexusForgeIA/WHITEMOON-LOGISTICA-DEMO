@@ -38,15 +38,20 @@ assets/js/lead.js                         captación — ÚNICO sitio con config
 assets/js/calc-terrestre.js               calculadora 1 · portes terrestre
 assets/js/calc-contenedores.js            calculadora 2 · contenedores por carretera
 assets/js/calc-maritimo.js                calculadora 3 · marítimo import/export
+assets/js/hugo.js                         agente IA Hugo — solo pinta, no calcula
 assets/js/site.js                         pestañas accesibles, reveal y año del pie
 assets/img/                               11 fotos locales + og:image + favicons
+supabase/functions/logistica-chat/        Edge Function del agente Hugo
+  index.ts                                conversación, herramientas y CORS
+  calculo.ts                              ÚNICA fuente de las métricas de envío
 supabase/functions/logistica-notify/      Edge Function del aviso por Telegram
 tests/calc.test.js                        verificación de las 3 fórmulas sin navegador
+tests/hugo.test.js                        verificación de las métricas del agente
 robots.txt  sitemap.xml  llms.txt  .nojekyll
 ```
 
-Orden de secciones: **Hero · Servicios · Calculadoras · Cómo funciona ·
-Rutas y zonas · FAQ · Contacto**.
+Orden de secciones: **Hero · Servicios · Calculadoras · Agente IA · Cómo
+funciona · Rutas y zonas · FAQ · Contacto**.
 
 Todo el contenido va dentro de un único `<main id="contenido">`; el `<header>`
 y el `<footer>` quedan fuera, así que hay un solo landmark principal.
@@ -134,10 +139,96 @@ calculadora expone su motor y se detiene antes de montar la interfaz.
 
 ---
 
+## El agente IA · Hugo
+
+Hugo es la cuarta pieza de la demo, en `#agente`, debajo de las calculadoras.
+**Conversa como un agente y calcula como un programa.** Recoge los datos de la
+carga hablando y devuelve cuatro métricas del envío. No da precios.
+
+### El reparto de trabajo, que es lo que importa
+
+| Quién | Qué hace |
+|---|---|
+| El modelo (`claude-haiku-4-5-20251001`) | Conversa, pregunta lo que falta y **extrae** los números de la carga. |
+| `calculo.ts` (TypeScript) | **Hace toda la aritmética.** |
+| El navegador | Pinta la ficha de métricas y dispara el lead por `lead.js`. |
+
+Los modelos de lenguaje fallan multiplicando, así que no se les pide que
+multipliquen. El modelo llama a la herramienta `calcular_metricas_envio` con
+los datos que ha entendido; la Edge Function ejecuta el cálculo en código,
+devuelve la ficha en el campo `metricas` de la respuesta y el navegador la
+pinta desde ahí. **Ninguna cifra de las que se ven en pantalla ha pasado por
+el modelo**, y el prompt le prohíbe explícitamente repetirlas en su texto.
+
+### Las cuatro métricas
+
+```
+Volumen por bulto (m³) = largo × ancho × alto (cm) / 1.000.000
+Volumen total (m³)     = volumen por bulto × nº de bultos
+Peso volumétrico (kg)  = largo × ancho × alto (cm) / 5000, por bulto
+Peso facturable (kg)   = max(peso real, peso volumétrico)
+Palés estimados        = bultos por capa sobre europalet 120 × 80 cm,
+                         apilados hasta 180 cm de altura útil
+```
+
+Son las fórmulas **estándar del sector**, no invenciones de la demo. El factor
+5000 es el divisor volumétrico habitual en grupaje y courier (1 m³ = 200 kg) y
+se muestra explícito en la ficha para que cualquiera pueda rehacer la cuenta.
+
+Los palés son lo único aproximado y por eso van etiquetados como **estimado**:
+es una estimación *geométrica* —bultos por capa probando las dos orientaciones
+sobre la base del europalet, apilados hasta la altura útil— que no considera
+el límite de peso por palet ni si la mercancía es apilable. Un bulto que no
+entra en ese sobre se marca como sobredimensionado en vez de forzar el número.
+
+Ejemplo verificable a mano: 6 bultos de 120 × 80 × 100 cm con 900 kg reales →
+0,96 m³ por bulto → 5,76 m³ · 192 kg volumétricos por bulto → 1.152 kg ·
+peso facturable 1.152 kg (manda el volumétrico) · 6 palés estimados.
+
+### Qué no hace
+
+Ni un euro. Hugo no cotiza importes, no aplica tarifas y no inventa plazos.
+Para un número en euros están las tres calculadoras, con su tarifa demo
+etiquetada. Cierra siempre diciendo que es una estimación de las métricas y
+que el presupuesto lo confirma el equipo.
+
+### La Edge Function `logistica-chat`
+
+`verify_jwt: false` (la llama un navegador anónimo desde GitHub Pages), CORS
+abierto, `max_tokens: 450` y las últimas **12** entradas del historial. La
+`ANTHROPIC_API_KEY` vive como *secret* de la función y **nunca** sale de ahí:
+en el cliente no hay ninguna clave de API.
+
+Dos herramientas, las dos ejecutadas en código:
+
+- `calcular_metricas_envio` → `calculo.ts`.
+- `registrar_contacto` → valida el teléfono con la **misma** regla que
+  `lead.js` (nueve dígitos empezando por 6, 7, 8 o 9) y devuelve el contacto
+  ya normalizado. La validación es una comprobación, no una opinión, así que
+  tampoco se le deja al modelo.
+
+Si algo falla —sin clave, Anthropic caído, red rota— la función responde 200
+con un mensaje de Hugo y el WhatsApp. El usuario nunca ve una pantalla en
+blanco.
+
+### Tests del agente
+
+```bash
+node tests/hugo.test.js
+```
+
+22 asertos que importan **el mismo `calculo.ts`** que corre en producción
+(Node 24 quita los tipos por su cuenta), así que se prueba la aritmética real
+y no una copia. Cada aserto lleva la cuenta hecha a mano al lado.
+
+---
+
 ## Captación del lead
 
-Tras cualquiera de los tres cálculos aparece un bloque de contacto. Al enviarlo
-se disparan **dos cosas en paralelo**, no encadenadas:
+Tras cualquiera de los tres cálculos aparece un bloque de contacto, y el
+agente Hugo pide nombre y teléfono al terminar sus métricas. Los dos caminos
+pasan por el mismo `lead.js`, así que la captación se escribe una sola vez.
+Al enviarlo se disparan **dos cosas en paralelo**, no encadenadas:
 
 1. **INSERT en `leads_web`** (Supabase `mlaqtniujnvfxcvcourm`) por REST con la
    *publishable key*, protegida por RLS. **Un reintento a los 800 ms si
