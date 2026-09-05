@@ -1,7 +1,8 @@
 # Demo de transporte y logística — WhiteMoon Agencia IA
 
 > Página única de captación para una empresa de transporte y logística, con
-> una suite de tres calculadoras de cotización como pieza central. Es una
+> una suite de tres calculadoras de cotización y un agente IA conversacional
+> (Hugo) como piezas centrales. Es una
 > DEMOSTRACIÓN comercial de WhiteMoon Agencia IA (Majadahonda, Madrid), no la
 > web de una empresa de transporte real.
 
@@ -85,6 +86,41 @@ recogida en origen, despacho de exportación y THC de origen.
 
 Puertos de destino contemplados: Valencia, Barcelona, Algeciras, Bilbao y
 Las Palmas. Incoterms: EXW, FOB y CIF.
+
+## El agente IA (Hugo)
+
+Además de las tres calculadoras, la página tiene un **agente conversacional
+llamado Hugo** que recoge los datos de la carga hablando y devuelve las
+métricas del envío. Hugo **no da precios ni aplica tarifas**: solo métricas de
+la mercancía.
+
+El reparto de trabajo es deliberado: el modelo de lenguaje conversa y extrae
+los datos, y **toda la aritmética la hace código TypeScript determinista** en
+la Edge Function, no el modelo. Ninguna de las cifras que se muestran ha sido
+generada por un modelo de lenguaje.
+
+Las cuatro métricas y sus fórmulas, que son las estándar del sector:
+
+```
+Volumen por bulto (m³) = largo × ancho × alto (cm) / 1.000.000
+Volumen total (m³)     = volumen por bulto × nº de bultos
+Peso volumétrico (kg)  = largo × ancho × alto (cm) / 5000, por bulto
+Peso facturable (kg)   = max(peso real, peso volumétrico)
+Palés estimados        = bultos por capa sobre europalet 120 × 80 cm,
+                         apilados hasta 180 cm de altura útil
+```
+
+El factor 5000 es el divisor volumétrico habitual (1 m³ = 200 kg). Los palés
+son una **estimación geométrica** etiquetada como tal: no considera el límite
+de peso por palet ni si la mercancía es apilable.
+
+Ejemplo verificable: 6 bultos de 120 × 80 × 100 cm con 900 kg reales ocupan
+0,96 m³ por bulto y 5,76 m³ en total; el peso volumétrico es 192 kg por bulto
+y 1.152 kg en total; como 1.152 > 900, el peso facturable es 1.152 kg; y salen
+6 palés estimados, uno por bulto.
+
+Hugo cierra siempre indicando que es una estimación de las métricas del envío
+y que el presupuesto final lo confirma el equipo.
 
 ## Qué hace la página con los datos
 

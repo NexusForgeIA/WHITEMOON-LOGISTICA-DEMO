@@ -135,6 +135,7 @@
     <nav class="nav-links" aria-label="Secciones">
       <a href="#servicios">Servicios</a>
       <a href="#calculadoras">Calculadoras</a>
+      <a href="#agente">Agente IA</a>
       <a href="#como-funciona">Cómo funciona</a>
       <a href="#rutas">Rutas y zonas</a>
       <a href="#faq">Preguntas</a>
@@ -659,6 +660,105 @@
     </div>
   </section>
 
+  <!-- ============================================================ AGENTE IA -->
+  <section id="agente" aria-labelledby="h-agente">
+    <div class="wrap">
+      <p class="eyebrow rv">Agente IA</p>
+      <h2 id="h-agente" class="rv">Hugo saca las métricas de tu carga hablando contigo</h2>
+      <p class="lead rv">
+        Si prefieres no rellenar un formulario, cuéntaselo a Hugo. Te pregunta lo justo
+        —qué mueves, cuánto pesa, cuánto mide cada bulto y cuántos son— y devuelve el
+        volumen, el peso volumétrico, el peso facturable y los palés estimados.
+        Las cuentas las hace el código, no el modelo de lenguaje.
+      </p>
+
+      <div class="chat-grid">
+
+        <div class="panel chat rv">
+          <div class="chat-h">
+            <span class="chat-av" aria-hidden="true">H</span>
+            <span>
+              <b>Hugo · agente IA</b>
+              <small>Calcula métricas de carga, no precios</small>
+            </span>
+          </div>
+
+          <div class="chat-log" id="hugo-log" role="log" aria-live="polite"
+               aria-label="Conversación con Hugo"></div>
+
+          <div class="chat-ejemplos">
+            <button type="button" data-hugo-ejemplo="Tengo 6 palés de azulejos, 900 kg en total, cada bulto mide 120x80x100 cm">Ejemplo · 6 palés de azulejos</button>
+            <button type="button" data-hugo-ejemplo="Son 24 cajas de recambios de 60x40x45 cm y pesan 300 kg entre todas">Ejemplo · 24 cajas de recambios</button>
+          </div>
+
+          <form id="hugo-form" class="chat-form" novalidate>
+            <label class="sr-only" for="hugo-input">Escribe tu mensaje a Hugo</label>
+            <input type="text" id="hugo-input" name="mensaje" autocomplete="off"
+                   placeholder="Qué tienes que mover…" maxlength="500">
+            <button type="submit" class="btn btn-1" id="hugo-btn">Enviar</button>
+          </form>
+
+          <p class="chat-nota">
+            Demo de WhiteMoon. Si dejas nombre y teléfono, se guardan en el CRM de pruebas
+            de WhiteMoon para devolverte la llamada. Hugo no da precios: las métricas son
+            orientativas y el presupuesto lo confirma una persona.
+          </p>
+
+          <noscript>
+            <p class="chat-nota">
+              El agente necesita JavaScript. Escríbenos por WhatsApp al
+              <a href="https://wa.me/34643199580" rel="noopener">643 199 580</a>
+              con los datos de tu carga y te las pasamos a mano.
+            </p>
+          </noscript>
+        </div>
+
+        <aside class="panel rv" aria-labelledby="h-formulas">
+          <div class="panel-h">
+            <h3 id="h-formulas">Las cuentas que hace</h3>
+            <span class="step">Fórmulas estándar</span>
+          </div>
+          <p class="panel-sub">
+            Ninguna es inventada: son las que usa el sector para decidir por qué peso se
+            factura un envío. Puedes rehacerlas a mano con los mismos números.
+          </p>
+          <ul class="formulas">
+            <li>
+              <b>Volumen</b>
+              <code>largo × ancho × alto (cm) ÷ 1.000.000</code>
+              <span>Metros cúbicos por bulto, multiplicados por el número de bultos.</span>
+            </li>
+            <li>
+              <b>Peso volumétrico</b>
+              <code>largo × ancho × alto (cm) ÷ 5000</code>
+              <span>El factor 5000 es el divisor volumétrico habitual: 1 m³ equivale a 200 kg.</span>
+            </li>
+            <li>
+              <b>Peso facturable</b>
+              <code>máximo (peso real, peso volumétrico)</code>
+              <span>La mercancía voluminosa y ligera factura por lo que ocupa, no por lo que pesa.</span>
+            </li>
+            <li>
+              <b>Palés estimados</b>
+              <code>footprint de europalet 120 × 80 cm</code>
+              <span>
+                Estimación geométrica: bultos por capa en las dos orientaciones, apilados
+                hasta 180 cm de altura útil. No considera el límite de peso por palet ni si
+                la mercancía es apilable.
+              </span>
+            </li>
+          </ul>
+          <p class="aviso">
+            <b>Sin precios.</b> Hugo no cotiza importes ni aplica tarifas: devuelve las
+            métricas de la carga. Para un número en euros están las tres calculadoras
+            —con su tarifa demo etiquetada— y, sobre todo, el equipo.
+          </p>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ======================================================= CÓMO FUNCIONA -->
   <section id="como-funciona" aria-labelledby="h-como">
     <div class="wrap split">
@@ -909,6 +1009,7 @@
 <script src="assets/js/calc-terrestre.js"></script>
 <script src="assets/js/calc-contenedores.js"></script>
 <script src="assets/js/calc-maritimo.js"></script>
+<script src="assets/js/hugo.js"></script>
 <script src="assets/js/site.js"></script>
 </body>
 </html>
